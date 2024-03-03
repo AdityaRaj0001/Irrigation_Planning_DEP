@@ -1,7 +1,8 @@
+import Input from "./Components/Input";
 function App() {
   return (
     <>
-      <p>Hellouuuu</p>
+      <Input/>
     </>
   );
 }
