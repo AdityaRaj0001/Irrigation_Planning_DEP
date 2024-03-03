@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-const API_KEY = "43ae40678e104154ac9807dda3a3da82";
+const API_KEY = "";
 
 const Input = () => {
   const [latitude, setLatitude] = useState("");
