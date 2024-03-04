@@ -4,6 +4,10 @@ const API_KEY = "43ae40678e104154ac9807dda3a3da82";
 const Input = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [precipitation, setPrecipitation] = useState([]);
+  const [soilMoisture, setSoilMoisture] = useState([]);
+  const [evapoTranspiration, setevapoTranspiration] = useState([]);
+  const [netIrrigationDemand, setnetIrrigationDemand] = useState([]);
 
   useEffect(() => {
     // Fetching user's location using the window object
@@ -28,45 +32,50 @@ const Input = () => {
     );
     const { data } = await response.json();
 
-    let soilMoisture = [];
-    let evapoTranspiration = [];
-    let precipitaion = [];
+    const soilMoisture = [];
+    const evapoTranspiration = [];
+    const precipitaion = [];
+
     for (let index = 0; index < data.length; index++) {
       const obj = data[index];
       soilMoisture.push(obj["v_soilm_100_200cm"]);
       evapoTranspiration.push(obj["evapotranspiration"]);
       precipitaion.push(obj["precip"]);
     }
-    const soilMoistureThreshold = 45;
+
+    const soilMoistureThreshold = 0.45;
     let cropType = "Wheat";
     let cropFactor;
-    if (cropType == "Rice" || cropType == "rice") {
+    if (cropType === "Rice" || cropType === "rice") {
       cropFactor = 1.1;
     }
-    if (cropType == "Wheat" || cropType == "wheat") {
-      cropFactor = 1.2;
+    if (cropType === "Wheat" || cropType === "wheat") {
+      cropFactor = 1.29;
     }
     let actualEvapotranspiration = [];
     let waterRequired = [];
     let netIrrigationDemand = [];
     for (var i = 0; i < 9; i++) {
-      actualEvapotranspiration.push(evapoTranspiration[i] * cropFactor);
-      waterRequired.push(actualEvapotranspiration[i] - precipitaion[i]);
+      actualEvapotranspiration[i] = evapoTranspiration[i] * cropFactor;
+      waterRequired[i] = actualEvapotranspiration[i] - precipitaion[i];
       if (soilMoisture[i] < soilMoistureThreshold) {
-        waterRequired.push(waterRequired[i]+soilMoistureThreshold - soilMoisture[i]);
+        waterRequired[i] +=
+          (soilMoistureThreshold - soilMoisture[i]) *
+          actualEvapotranspiration[i];
       }
-      if(waterRequired[i]<0){
-        netIrrigationDemand.push(0);
-      }
-      else{
-        netIrrigationDemand.push(waterRequired[i]);
-      }
+      netIrrigationDemand[i] = waterRequired[i] < 0 ? 0 : waterRequired[i];
     }
-    // console.log(netIrrigationDemand)
+    console.log(netIrrigationDemand);
+
+    // Set precipitation data in state
+    setPrecipitation(precipitaion);
+    setevapoTranspiration(evapoTranspiration);
+    setSoilMoisture(soilMoisture);
+    setnetIrrigationDemand(netIrrigationDemand)
   };
 
   return (
-    <div className="h-[100vh] w-full">
+    <div className="h-[100vh] w-full flex items-center justify-center flex-col">
       <div className="text-red-500 text-2xl">
         <marquee>
           Please allow location access for the application to work
@@ -109,9 +118,34 @@ const Input = () => {
           className="text-black  bg-gray-300 p-2 px-8  rounded-lg"
           onClick={handleFetch}
         >
-          Fetch
+          GetData
         </button>
       </div>
+      <table className="table w-4/5  h-[100vh] text-black text-lg">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>precipitation (mm)</th>
+            <th>soilMoisture (mm)</th>
+            <th>evapoTranspiration (mm)</th>
+            <th>netIrrigationDemand (mm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {precipitation.length > 0 && (
+            precipitation.map((data,i)=>{
+            //  return <span className="" key={i}>{precipitation[i]}</span>
+            return <tr className="text-center" key={i}>
+              <td>Day{i}</td>
+              <td>{precipitation[i]}</td>
+              <td>{soilMoisture[i]}</td>
+              <td>{evapoTranspiration[i]}</td>
+              <td>{netIrrigationDemand[i]}</td>
+            </tr>
+            })
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
