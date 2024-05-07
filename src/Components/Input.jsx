@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-const API_KEY = "43ae40678e104154ac9807dda3a3da82";
+const API_KEY = "ce04e7c7a028444281ce2a76322f3813";
 
 const Input = () => {
   const [latitude, setLatitude] = useState("");
@@ -76,19 +76,19 @@ const Input = () => {
 
   return (
     <div className="h-[100vh] w-full flex items-center justify-center flex-col">
-      <div className="text-red-500 text-2xl">
+      <div className="text-red-500 w-full text-2xl">
         <marquee>
           Please allow location access for the application to work
         </marquee>
       </div>
 
       <div className="h-[60%] w-full items-center justify-center flex flex-col">
-        <p className="w-4/5 uppercase text-4xl text-center mb-12">
+        <p className="w-4/5 uppercase text-4xl font-bold text-center mb-12">
           Irrigation Planning
         </p>
         <div className="flex w-4/5 justify-center gap-4  h-[20%]">
           <div className="h-full w-1/3 flex flex-col">
-            <label htmlFor="latitudeInput" className="text-lg">
+            <label htmlFor="latitudeInput" className="text-lg font-semibold">
               Latitude:
             </label>
             <input
@@ -100,7 +100,7 @@ const Input = () => {
             />
           </div>
           <div className="h-full w-1/3 flex flex-col">
-            <label htmlFor="longitudeInput" className="text-lg">
+            <label htmlFor="longitudeInput" className="text-lg font-semibold">
               Longitude:
             </label>
             <input
@@ -115,15 +115,15 @@ const Input = () => {
       </div>
       <div className="w-full h-[10vh] text-center">
         <button
-          className="text-black  bg-gray-300 p-2 px-8  rounded-lg"
+          className="text-black  bg-gray-300 p-2 px-8 mb-8 rounded-lg"
           onClick={handleFetch}
         >
-          GetData
+          Fetch
         </button>
       </div>
-      <table className="table w-4/5  h-[100vh] text-black text-lg">
+      <table className="table w-4/5 pt-12 pb-12  h-[100vh] text-black text-lg">
         <thead>
-          <tr>
+          <tr >
             <th>Day</th>
             <th>precipitation (mm)</th>
             <th>soilMoisture (mm)</th>
@@ -134,7 +134,6 @@ const Input = () => {
         <tbody>
           {precipitation.length > 0 && (
             precipitation.map((data,i)=>{
-            //  return <span className="" key={i}>{precipitation[i]}</span>
             return <tr className="text-center" key={i}>
               <td>Day{i}</td>
               <td>{precipitation[i]}</td>
@@ -143,6 +142,9 @@ const Input = () => {
               <td>{netIrrigationDemand[i]}</td>
             </tr>
             })
+          )}
+          {precipitation.length ==0 && (
+             <p className="text-center text-3xl w-[300%] text-red-900 mt-12">Click on "Fetch" to Get Data</p>
           )}
         </tbody>
       </table>
