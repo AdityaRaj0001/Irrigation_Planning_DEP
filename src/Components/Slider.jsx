@@ -8,13 +8,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/ShadCnComponents/ui/carousel";
-const imageArray = ["./slider2.jpg", "./slider4.jpg", "./slider2.jpg", "slider3.jpg", "./slider1.jpg"];
+const imageArray = ["./slider1.jpg", "./slider2.jpg", "./slider3.jpg", "slider4.jpg"];
 
 
 export default function Slideshow() {
   return (
     <div className="w-full  flex justify-center relative">
-      <h1 className="text-7xl text-white absolute top-12 uppercase  z-20">Irrigation planning</h1>
+      <h1 className="text-7xl text-white absolute top-44 uppercase  z-20">Irrigation planning</h1>
       <Carousel className="w-[90%]
 ">
         <CarouselContent>
