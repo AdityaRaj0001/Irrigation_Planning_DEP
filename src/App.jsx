@@ -1,8 +1,10 @@
 import Input from "./Components/Input";
+import Slider from "./Components/Slider";
 function App() {
   return (
     <>
-      <Input/>
+      <Slider />
+      <Input />
     </>
   );
 }
